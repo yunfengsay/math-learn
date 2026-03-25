@@ -1,0 +1,17 @@
+[project]
+name = "svd-server"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "numpy",
+    "scipy",
+    "scikit-learn",
+    "Pillow",
+    "python-multipart",
+    "scikit-image",
+]
+
+[tool.setuptools]
+py-modules = []

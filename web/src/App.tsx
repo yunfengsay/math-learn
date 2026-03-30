@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Layout from './components/Layout'
+import RoadmapPage from './pages/RoadmapPage'
 import FormulaPage from './pages/FormulaPage'
 import CodeSandbox from './pages/CodeSandbox'
 import ImageCompression from './pages/ImageCompression'
@@ -12,12 +13,13 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
+          <Route path="/roadmap" element={<RoadmapPage />} />
           <Route path="/formula" element={<FormulaPage />} />
           <Route path="/sandbox" element={<CodeSandbox />} />
           <Route path="/compression" element={<ImageCompression />} />
           <Route path="/neural-net" element={<NeuralNetwork />} />
           <Route path="/eigenfaces" element={<Eigenfaces />} />
-          <Route path="*" element={<Navigate to="/formula" replace />} />
+          <Route path="*" element={<Navigate to="/roadmap" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>

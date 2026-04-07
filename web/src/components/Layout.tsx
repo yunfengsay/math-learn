@@ -6,8 +6,8 @@ export default function Layout() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1>SVD 交互式学习工具</h1>
-        <p className="subtitle">奇异值分解 — 支撑人工智能与数据科学的数学引擎</p>
+        <h1>Deep Learning Mastery</h1>
+        <p className="subtitle">从数学基础到前沿研究 — 全路径交互式学习平台</p>
         <div style={{ marginLeft: 'auto' }}>
           <ThemeToggle />
         </div>

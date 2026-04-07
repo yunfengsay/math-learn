@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type Status = 'available' | 'planned' | 'external'
 
@@ -50,7 +51,8 @@ const curriculum: Category[] = [
         id: 'calculus',
         title: '微积分与自动微分',
         subtitle: '梯度、链式法则、Jacobian',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/calculus',
         difficulty: 2,
         prereqs: [],
         concepts: ['偏导数与梯度向量', '链式法则 → 反向传播', 'Jacobian 与 Hessian 矩阵', '自动微分 (AD) 原理', 'Taylor 展开与优化'],
@@ -64,7 +66,8 @@ const curriculum: Category[] = [
         id: 'probability',
         title: '概率论与信息论',
         subtitle: '分布、贝叶斯、熵、KL 散度',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/probability',
         difficulty: 3,
         prereqs: ['calculus'],
         concepts: ['常见分布（高斯、伯努利、Categorical）', '贝叶斯定理与后验推断', '最大似然估计 (MLE) 与 MAP', '信息熵、交叉熵、KL 散度', 'VAE 的 ELBO 推导'],
@@ -78,7 +81,8 @@ const curriculum: Category[] = [
         id: 'optimization',
         title: '优化理论',
         subtitle: 'SGD、Adam、学习率调度、收敛性',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/optimization',
         difficulty: 3,
         prereqs: ['calculus', 'linear-algebra'],
         concepts: ['凸优化 vs 非凸优化', 'SGD 与 mini-batch 的方差分析', 'Momentum、RMSProp、Adam 族', '学习率调度（Cosine、Warmup）', '损失地貌与鞍点'],
@@ -115,7 +119,8 @@ const curriculum: Category[] = [
         id: 'backprop',
         title: '反向传播与计算图',
         subtitle: 'AD、计算图、梯度累积',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/backprop',
         difficulty: 3,
         prereqs: ['nn-basics', 'calculus'],
         concepts: ['前向传播 vs 反向传播', '计算图与拓扑排序', '梯度检查 (numerical gradient)', '梯度累积与混合精度', 'PyTorch autograd 原理'],
@@ -129,7 +134,8 @@ const curriculum: Category[] = [
         id: 'regularization',
         title: '正则化与泛化',
         subtitle: 'Dropout、BatchNorm、数据增强',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/regularization',
         difficulty: 2,
         prereqs: ['nn-basics'],
         concepts: ['偏差-方差权衡', 'L1/L2 正则化的几何解释', 'Dropout 的贝叶斯解释', 'BatchNorm / LayerNorm / RMSNorm', '数据增强策略'],
@@ -150,7 +156,8 @@ const curriculum: Category[] = [
         id: 'cnn',
         title: '卷积神经网络 (CNN)',
         subtitle: '卷积、池化、ResNet、特征可视化',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/cnn',
         difficulty: 3,
         prereqs: ['nn-basics'],
         concepts: ['卷积的数学定义与实现', '感受野计算', 'ResNet 残差连接的梯度分析', '特征图可视化', '1x1 卷积与通道注意力'],
@@ -164,7 +171,8 @@ const curriculum: Category[] = [
         id: 'rnn',
         title: '循环神经网络 (RNN/LSTM)',
         subtitle: '序列建模、门控机制、梯度问题',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/rnn',
         difficulty: 3,
         prereqs: ['nn-basics', 'backprop'],
         concepts: ['RNN 展开与 BPTT', 'LSTM 门控机制', 'GRU 简化版本', '梯度消失/爆炸的数学分析', '双向 RNN 与 Seq2Seq'],
@@ -178,7 +186,8 @@ const curriculum: Category[] = [
         id: 'transformer',
         title: 'Transformer',
         subtitle: 'Self-Attention、位置编码、KV Cache',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/transformer',
         difficulty: 4,
         prereqs: ['linear-algebra', 'nn-basics', 'rnn'],
         concepts: ['Scaled Dot-Product Attention', 'Multi-Head Attention 的作用', '位置编码（sinusoidal、RoPE、ALiBi）', 'KV Cache 与推理优化', 'Flash Attention 原理'],
@@ -201,7 +210,8 @@ const curriculum: Category[] = [
         id: 'llm',
         title: '大语言模型 (LLM)',
         subtitle: 'GPT、LLaMA、Scaling Laws、涌现能力',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/llm',
         difficulty: 4,
         prereqs: ['transformer', 'probability'],
         concepts: ['自回归语言建模', 'Scaling Laws (Chinchilla)', 'Tokenization (BPE/SentencePiece)', '涌现能力与 In-Context Learning', 'MoE (Mixture of Experts)'],
@@ -216,7 +226,8 @@ const curriculum: Category[] = [
         id: 'diffusion',
         title: '扩散模型',
         subtitle: 'DDPM、Stable Diffusion、Flow Matching',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/diffusion',
         difficulty: 5,
         prereqs: ['probability', 'nn-basics'],
         concepts: ['前向扩散 (加噪) 与逆扩散 (去噪)', 'DDPM 的数学推导', 'Latent Diffusion (Stable Diffusion)', 'Classifier-Free Guidance', 'Flow Matching 与 Rectified Flow'],
@@ -230,7 +241,8 @@ const curriculum: Category[] = [
         id: 'rlhf',
         title: 'RLHF 与对齐',
         subtitle: 'PPO、DPO、Constitutional AI',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/rlhf',
         difficulty: 5,
         prereqs: ['llm', 'optimization'],
         concepts: ['奖励模型训练', 'PPO 算法在 LLM 中的应用', 'DPO: 去掉奖励模型的简化', 'Constitutional AI (Anthropic)', 'RLHF 的局限与替代方案'],
@@ -282,7 +294,8 @@ const curriculum: Category[] = [
         id: 'experiment',
         title: '实验管理与调参',
         subtitle: 'wandb、学习率策略、消融实验',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/experiment',
         difficulty: 3,
         prereqs: ['pytorch', 'optimization'],
         concepts: ['实验追踪 (Weights & Biases)', '超参搜索策略', '消融实验设计', '训练日志分析', '复现性保证'],
@@ -295,7 +308,8 @@ const curriculum: Category[] = [
         id: 'deployment',
         title: '模型部署',
         subtitle: 'ONNX、TensorRT、vLLM、Triton',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/deployment',
         difficulty: 4,
         prereqs: ['pytorch', 'efficiency'],
         concepts: ['ONNX 模型导出与优化', 'TensorRT 加速推理', 'vLLM PagedAttention', 'Batching 策略', 'Serving 框架选择'],
@@ -316,7 +330,8 @@ const curriculum: Category[] = [
         id: 'multimodal',
         title: '多模态模型',
         subtitle: 'CLIP、GPT-4V、Gemini',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/multimodal',
         difficulty: 5,
         prereqs: ['transformer', 'cnn'],
         concepts: ['对比学习 (CLIP)', '视觉编码器选择', '多模态融合策略', '视觉 Token 化', 'Interleaved 多模态'],
@@ -330,7 +345,8 @@ const curriculum: Category[] = [
         id: 'agents',
         title: 'AI Agent',
         subtitle: '工具使用、规划、代码生成',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/agent',
         difficulty: 4,
         prereqs: ['llm'],
         concepts: ['ReAct 推理框架', '工具使用与函数调用', 'Tree-of-Thought 搜索', '代码生成与执行', '多智能体协作'],
@@ -344,7 +360,8 @@ const curriculum: Category[] = [
         id: 'reasoning',
         title: '推理与思维链',
         subtitle: 'CoT、o1、MCTS、过程奖励',
-        status: 'planned',
+        status: 'available',
+        internalLink: '/reasoning',
         difficulty: 5,
         prereqs: ['llm', 'rlhf'],
         concepts: ['Chain-of-Thought Prompting', 'Self-Consistency 解码', '过程奖励模型 (PRM)', 'Test-Time Compute Scaling', 'MCTS + LLM'],
@@ -361,6 +378,8 @@ const curriculum: Category[] = [
 const difficultyLabels = ['', '入门', '基础', '进阶', '高级', '前沿']
 
 function TopicDetail({ topic, onClose }: { topic: Topic; onClose: () => void }) {
+  const navigate = useNavigate()
+
   return (
     <div style={{
       position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 100,
@@ -371,95 +390,123 @@ function TopicDetail({ topic, onClose }: { topic: Topic; onClose: () => void }) 
         maxWidth: 640, width: '100%', maxHeight: '80vh', overflowY: 'auto',
         border: '1px solid var(--border)',
       }} onClick={e => e.stopPropagation()}>
-        <div className="flex-between" style={{ marginBottom: 16 }}>
-          <div>
-            <h3 style={{ fontSize: 18, fontWeight: 700 }}>{topic.title}</h3>
-            <div style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 2 }}>{topic.subtitle}</div>
-          </div>
-          <button className="btn btn-secondary" onClick={onClose} style={{ padding: '4px 12px' }}>
-            &#x2715;
-          </button>
-        </div>
-
-        <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
-          <span className="metric" style={{
-            fontSize: 11, padding: '2px 8px', borderRadius: 4,
-            background: topic.status === 'available' ? 'var(--accent-muted)' : 'var(--bg-card)',
-            color: topic.status === 'available' ? 'var(--accent)' : 'var(--text-muted)',
-            fontWeight: 600,
-          }}>
-            {topic.status === 'available' ? '有交互 Demo' : topic.status === 'planned' ? '规划中' : '外部资源'}
-          </span>
-          <span className="metric" style={{
-            fontSize: 11, padding: '2px 8px', borderRadius: 4,
-            background: 'var(--bg-card)', color: 'var(--text-muted)',
-          }}>
-            难度 {'#'.repeat(topic.difficulty)}{'_'.repeat(5 - topic.difficulty)} {difficultyLabels[topic.difficulty]}
-          </span>
-        </div>
-
-        {topic.prereqs.length > 0 && (
-          <div style={{ marginBottom: 16 }}>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, marginBottom: 4 }}>前置知识</div>
-            <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-              {topic.prereqs.map(p => (
-                <span key={p} style={{
-                  fontSize: 11, padding: '2px 8px', borderRadius: 4,
-                  background: 'var(--bg-surface)', color: 'var(--text-secondary)',
-                }}>{p}</span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, marginBottom: 6 }}>为什么重要</div>
-          <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8, margin: 0 }}>
-            {topic.whyItMatters}
-          </p>
-        </div>
-
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, marginBottom: 6 }}>核心概念</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4 }}>
-            {topic.concepts.map((c, i) => (
-              <div key={i} style={{
-                fontSize: 12, padding: '4px 8px', borderRadius: 4,
-                background: 'var(--bg-surface)', color: 'var(--text-primary)',
-                borderLeft: '2px solid var(--accent)',
-              }}>{c}</div>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, marginBottom: 6 }}>学习资源</div>
-          {topic.resources.map((r, i) => (
-            <a key={i} href={r.url} target="_blank" rel="noopener noreferrer"
-              style={{
-                display: 'block', fontSize: 12, color: 'var(--accent)',
-                padding: '4px 0', textDecoration: 'none',
-              }}>
-              {r.label} &#8599;
-            </a>
-          ))}
-        </div>
-
+        <TopicHeader topic={topic} onClose={onClose} />
+        <TopicMeta topic={topic} />
+        <TopicPrereqs prereqs={topic.prereqs} />
+        <TopicWhyMatters text={topic.whyItMatters} />
+        <TopicConcepts concepts={topic.concepts} />
+        <TopicResources resources={topic.resources} />
         {topic.internalLink && (
-          <a href={topic.internalLink} style={{
-            display: 'inline-block', marginTop: 16, padding: '8px 16px', borderRadius: 8,
-            background: 'var(--accent)', color: '#09090b', textDecoration: 'none',
-            fontSize: 13, fontWeight: 600,
-          }}>
-            进入交互 Demo &#8594;
-          </a>
+          <button
+            onClick={() => { onClose(); navigate(topic.internalLink!) }}
+            className="btn btn-primary"
+            style={{ marginTop: 16, fontSize: 13 }}
+          >
+            进入交互 Demo →
+          </button>
         )}
       </div>
     </div>
   )
 }
 
+function TopicHeader({ topic, onClose }: { topic: Topic; onClose: () => void }) {
+  return (
+    <div className="flex-between" style={{ marginBottom: 16 }}>
+      <div>
+        <h3 style={{ fontSize: 18, fontWeight: 700 }}>{topic.title}</h3>
+        <div style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 2 }}>{topic.subtitle}</div>
+      </div>
+      <button className="btn btn-secondary" onClick={onClose} style={{ padding: '4px 12px' }}>
+        &#x2715;
+      </button>
+    </div>
+  )
+}
+
+function TopicMeta({ topic }: { topic: Topic }) {
+  return (
+    <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
+      <span className="metric" style={{
+        fontSize: 11, padding: '2px 8px', borderRadius: 4,
+        background: topic.status === 'available' ? 'var(--accent-muted)' : 'var(--bg-card)',
+        color: topic.status === 'available' ? 'var(--accent)' : 'var(--text-muted)',
+        fontWeight: 600,
+      }}>
+        {topic.status === 'available' ? '有交互 Demo' : topic.status === 'planned' ? '规划中' : '外部资源'}
+      </span>
+      <span className="metric" style={{
+        fontSize: 11, padding: '2px 8px', borderRadius: 4,
+        background: 'var(--bg-card)', color: 'var(--text-muted)',
+      }}>
+        难度 {'#'.repeat(topic.difficulty)}{'_'.repeat(5 - topic.difficulty)} {difficultyLabels[topic.difficulty]}
+      </span>
+    </div>
+  )
+}
+
+function TopicPrereqs({ prereqs }: { prereqs: string[] }) {
+  if (prereqs.length === 0) return null
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, marginBottom: 4 }}>前置知识</div>
+      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+        {prereqs.map(p => (
+          <span key={p} style={{
+            fontSize: 11, padding: '2px 8px', borderRadius: 4,
+            background: 'var(--bg-surface)', color: 'var(--text-secondary)',
+          }}>{p}</span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function TopicWhyMatters({ text }: { text: string }) {
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, marginBottom: 6 }}>为什么重要</div>
+      <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8, margin: 0 }}>{text}</p>
+    </div>
+  )
+}
+
+function TopicConcepts({ concepts }: { concepts: string[] }) {
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, marginBottom: 6 }}>核心概念</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4 }}>
+        {concepts.map((c, i) => (
+          <div key={i} style={{
+            fontSize: 12, padding: '4px 8px', borderRadius: 4,
+            background: 'var(--bg-surface)', color: 'var(--text-primary)',
+            borderLeft: '2px solid var(--accent)',
+          }}>{c}</div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function TopicResources({ resources }: { resources: { label: string; url: string }[] }) {
+  return (
+    <div>
+      <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, marginBottom: 6 }}>学习资源</div>
+      {resources.map((r, i) => (
+        <a key={i} href={r.url} target="_blank" rel="noopener noreferrer"
+          style={{
+            display: 'block', fontSize: 12, color: 'var(--accent)',
+            padding: '4px 0', textDecoration: 'none',
+          }}>
+          {r.label} &#8599;
+        </a>
+      ))}
+    </div>
+  )
+}
+
 export default function RoadmapPage() {
+  const navigate = useNavigate()
   const [activeTopic, setActiveTopic] = useState<Topic | null>(null)
   const [filter, setFilter] = useState<'all' | 'available' | 'planned'>('all')
 
@@ -476,7 +523,7 @@ export default function RoadmapPage() {
             Deep Learning Mastery Roadmap
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: 12, marginTop: 4 }}>
-            {stats.total} 个主题 | {stats.available} 个有交互 Demo | 点击任意主题查看详情
+            {stats.total} 个主题 | {stats.available} 个有交互 Demo | 点击卡片直接进入课程
           </p>
         </div>
         <div style={{ display: 'flex', gap: 4 }}>
@@ -504,7 +551,7 @@ export default function RoadmapPage() {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 8 }}>
               {topics.map(topic => (
-                <button key={topic.id} onClick={() => setActiveTopic(topic)} style={{
+                <button key={topic.id} onClick={() => topic.internalLink ? navigate(topic.internalLink) : setActiveTopic(topic)} style={{
                   background: 'var(--bg-card)', borderRadius: 10, padding: '14px 16px',
                   border: '1px solid var(--border-subtle)', cursor: 'pointer',
                   textAlign: 'left', color: 'var(--text-primary)', fontFamily: 'inherit',
